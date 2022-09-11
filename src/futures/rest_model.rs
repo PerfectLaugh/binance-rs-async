@@ -310,10 +310,10 @@ pub struct Order {
     pub time_in_force: String,
     #[serde(rename = "type")]
     pub type_name: String,
-    #[serde(with = "string_or_float")]
-    pub activate_price: f64,
-    #[serde(with = "string_or_float")]
-    pub price_rate: f64,
+    #[serde(default, with = "string_or_float_opt")]
+    pub activate_price: Option<f64>,
+    #[serde(default, with = "string_or_float_opt")]
+    pub price_rate: Option<f64>,
     pub update_time: u64,
     pub working_type: String,
     pub price_protect: bool,

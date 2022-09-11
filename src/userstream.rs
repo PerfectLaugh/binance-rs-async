@@ -58,7 +58,10 @@ impl UserStream {
     /// assert!(close.is_ok())
     /// ```
     pub async fn close(&self, listen_key: &str) -> Result<Success> {
-        let data = self.client.delete(USER_DATA_STREAM, listen_key, None).await?;
+        let data = self
+            .client
+            .delete(USER_DATA_STREAM, listen_key, None)
+            .await?;
 
         let success: Success = from_str(data.as_str())?;
 

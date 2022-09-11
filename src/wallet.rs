@@ -9,7 +9,8 @@ use std::ops::Sub;
 static SAPI_V1_SYSTEM_STATUS: &str = "/sapi/v1/system/status";
 static SAPI_V1_CAPITAL_CONFIG_GETALL: &str = "/sapi/v1/capital/config/getall";
 static SAPI_V1_ACCOUNTSNAPSHOT: &str = "/sapi/v1/accountSnapshot";
-static SAPI_V1_ACCOUNT_DISABLEFASTWITHDRAWSWITCH: &str = "/sapi/v1/account/disableFastWithdrawSwitch";
+static SAPI_V1_ACCOUNT_DISABLEFASTWITHDRAWSWITCH: &str =
+    "/sapi/v1/account/disableFastWithdrawSwitch";
 static SAPI_V1_ACCOUNT_ENABLEFASTWITHDRAWSWITCH: &str = "/sapi/v1/account/enableFastWithdrawSwitch";
 static SAPI_V1_CAPITAL_WITHDRAW_APPLY: &str = "/sapi/v1/capital/withdraw/apply";
 static SAPI_V1_CAPITAL_DEPOSIT_HISREC: &str = "/sapi/v1/capital/deposit/hisrec";
@@ -45,7 +46,9 @@ impl Wallet {
     /// let system_status = tokio_test::block_on(wallet.system_status());
     /// assert!(system_status.is_ok(), "{:?}", system_status);
     /// ```
-    pub async fn system_status(&self) -> Result<SystemStatus> { self.client.get_p(SAPI_V1_SYSTEM_STATUS, "").await }
+    pub async fn system_status(&self) -> Result<SystemStatus> {
+        self.client.get_p(SAPI_V1_SYSTEM_STATUS, "").await
+    }
 
     /// Get information of coins (available for deposit and withdraw) for user.
     /// # Examples
@@ -57,7 +60,11 @@ impl Wallet {
     /// ```
     pub async fn all_coin_info(&self) -> Result<Vec<WalletCoinInfo>> {
         self.client
-            .get_signed_p(SAPI_V1_CAPITAL_CONFIG_GETALL, Option::<String>::None, self.recv_window)
+            .get_signed_p(
+                SAPI_V1_CAPITAL_CONFIG_GETALL,
+                Option::<String>::None,
+                self.recv_window,
+            )
             .await
     }
 
@@ -74,7 +81,10 @@ impl Wallet {
     /// let records = tokio_test::block_on(wallet.daily_account_snapshot(query));
     /// assert!(records.is_ok(), "{:?}", records);
     /// ```
-    pub async fn daily_account_snapshot(&self, query: AccountSnapshotQuery) -> Result<AccountSnapshot> {
+    pub async fn daily_account_snapshot(
+        &self,
+        query: AccountSnapshotQuery,
+    ) -> Result<AccountSnapshot> {
         self.client
             .get_signed_p(SAPI_V1_ACCOUNTSNAPSHOT, Some(query), self.recv_window)
             .await
@@ -130,7 +140,11 @@ impl Wallet {
     /// ```
     pub async fn withdraw(&self, query: CoinWithdrawalQuery) -> Result<()> {
         self.client
-            .post_signed_p(SAPI_V1_CAPITAL_WITHDRAW_APPLY, Some(query), self.recv_window)
+            .post_signed_p(
+                SAPI_V1_CAPITAL_WITHDRAW_APPLY,
+                Some(query),
+                self.recv_window,
+            )
             .await
     }
 
@@ -146,7 +160,11 @@ impl Wallet {
     /// ```
     pub async fn deposit_history(&self, query: DepositHistoryQuery) -> Result<Vec<DepositRecord>> {
         self.client
-            .get_signed_p(SAPI_V1_CAPITAL_DEPOSIT_HISREC, Some(query), self.recv_window)
+            .get_signed_p(
+                SAPI_V1_CAPITAL_DEPOSIT_HISREC,
+                Some(query),
+                self.recv_window,
+            )
             .await
     }
 
@@ -167,7 +185,8 @@ impl Wallet {
     ) -> Result<Vec<RecordHistory<DepositRecord>>> {
         let mut result = vec![];
 
-        let total_duration = total_duration.unwrap_or(Duration::days(DEFAULT_WALLET_HISTORY_QUERY_INTERVAL_DAYS));
+        let total_duration =
+            total_duration.unwrap_or(Duration::days(DEFAULT_WALLET_HISTORY_QUERY_INTERVAL_DAYS));
         let interval_duration = Duration::days(DEFAULT_WALLET_HISTORY_QUERY_INTERVAL_DAYS);
         let mut current_period_end: DateTime<Utc> = start_from.unwrap_or(Utc::now());
         let end_at = current_period_end.sub(total_duration);
@@ -208,9 +227,16 @@ impl Wallet {
     /// let records = tokio_test::block_on(wallet.withdraw_history(query));
     /// assert!(records.is_ok(), "{:?}", records);
     /// ```
-    pub async fn withdraw_history(&self, query: WithdrawalHistoryQuery) -> Result<Vec<WithdrawalRecord>> {
+    pub async fn withdraw_history(
+        &self,
+        query: WithdrawalHistoryQuery,
+    ) -> Result<Vec<WithdrawalRecord>> {
         self.client
-            .get_signed_p(SAPI_V1_CAPITAL_WITHDRAW_HISTORY, Some(query), self.recv_window)
+            .get_signed_p(
+                SAPI_V1_CAPITAL_WITHDRAW_HISTORY,
+                Some(query),
+                self.recv_window,
+            )
             .await
     }
 
@@ -233,7 +259,8 @@ impl Wallet {
     ) -> Result<Vec<RecordHistory<WithdrawalRecord>>> {
         let mut result = vec![];
 
-        let total_duration = total_duration.unwrap_or(Duration::days(DEFAULT_WALLET_HISTORY_QUERY_INTERVAL_DAYS));
+        let total_duration =
+            total_duration.unwrap_or(Duration::days(DEFAULT_WALLET_HISTORY_QUERY_INTERVAL_DAYS));
         let interval_duration = Duration::days(DEFAULT_WALLET_HISTORY_QUERY_INTERVAL_DAYS);
         let mut current_period_end: DateTime<Utc> = start_from.unwrap_or(Utc::now());
         let end_at = current_period_end.sub(total_duration);
@@ -274,7 +301,11 @@ impl Wallet {
     /// ```
     pub async fn deposit_address(&self, query: DepositAddressQuery) -> Result<DepositAddress> {
         self.client
-            .get_signed_p(SAPI_V1_CAPITAL_DEPOSIT_ADDRESS, Some(query), self.recv_window)
+            .get_signed_p(
+                SAPI_V1_CAPITAL_DEPOSIT_ADDRESS,
+                Some(query),
+                self.recv_window,
+            )
             .await
     }
 
@@ -344,7 +375,11 @@ impl Wallet {
     /// ```
     pub async fn account_status(&self) -> Result<AccountStatus> {
         self.client
-            .get_signed_p(SAPI_V1_ACCOUNT_STATUS, Option::<String>::None, self.recv_window)
+            .get_signed_p(
+                SAPI_V1_ACCOUNT_STATUS,
+                Option::<String>::None,
+                self.recv_window,
+            )
             .await
     }
 
@@ -376,7 +411,11 @@ impl Wallet {
     /// let records = tokio_test::block_on(wallet.dust_log(None, None));
     /// assert!(records.is_ok(), "{:?}", records);
     /// ```
-    pub async fn dust_log(&self, start_time: Option<u64>, end_time: Option<u64>) -> Result<DustLog> {
+    pub async fn dust_log(
+        &self,
+        start_time: Option<u64>,
+        end_time: Option<u64>,
+    ) -> Result<DustLog> {
         let mut query = HashMap::new();
         query.insert("start_time", start_time);
         query.insert("end_time", end_time);
@@ -396,7 +435,11 @@ impl Wallet {
     /// ```
     pub async fn convertible_assets(&self) -> Result<ConvertibleAssets> {
         self.client
-            .post_signed_p(SAPI_V1_ASSET_DUSTBTC, Option::<String>::None, self.recv_window)
+            .post_signed_p(
+                SAPI_V1_ASSET_DUSTBTC,
+                Option::<String>::None,
+                self.recv_window,
+            )
             .await
     }
 
@@ -428,7 +471,10 @@ impl Wallet {
     /// let records = tokio_test::block_on(wallet.asset_dividends(AssetDividendQuery::default()));
     /// assert!(records.is_ok(), "{:?}", records);
     /// ```
-    pub async fn asset_dividends(&self, query: AssetDividendQuery) -> Result<RecordsQueryResult<AssetDividend>> {
+    pub async fn asset_dividends(
+        &self,
+        query: AssetDividendQuery,
+    ) -> Result<RecordsQueryResult<AssetDividend>> {
         self.client
             .get_signed_p(SAPI_V1_ASSET_ASSETDIVIDEND, Some(query), self.recv_window)
             .await
@@ -483,7 +529,10 @@ impl Wallet {
     ) -> Result<WalletFundings> {
         let mut query = HashMap::new();
         query.insert("asset", asset);
-        query.insert("need_btc_valuation", need_btc_valuation.map(|b| format!("{}", b)));
+        query.insert(
+            "need_btc_valuation",
+            need_btc_valuation.map(|b| format!("{}", b)),
+        );
         self.client
             .post_signed_p(SAPI_V1_ASSET_GETFUNDINGASSET, Some(query), self.recv_window)
             .await
@@ -500,7 +549,11 @@ impl Wallet {
     /// ```
     pub async fn api_key_permissions(&self) -> Result<ApiKeyPermissions> {
         self.client
-            .get_signed_p(SAPI_V1_ASSET_APIRESTRICTIONS, Option::<String>::None, self.recv_window)
+            .get_signed_p(
+                SAPI_V1_ASSET_APIRESTRICTIONS,
+                Option::<String>::None,
+                self.recv_window,
+            )
             .await
     }
 }

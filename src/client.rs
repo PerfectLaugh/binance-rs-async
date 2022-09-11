@@ -50,7 +50,11 @@ impl Client {
         self.handler(response).await
     }
 
-    pub async fn get_signed_d<T: de::DeserializeOwned>(&self, endpoint: &str, request: &str) -> Result<T> {
+    pub async fn get_signed_d<T: de::DeserializeOwned>(
+        &self,
+        endpoint: &str,
+        request: &str,
+    ) -> Result<T> {
         let r = self.get_signed(endpoint, request).await?;
         let t = from_str(r.as_str())?;
         Ok(t)
@@ -87,7 +91,11 @@ impl Client {
         self.handler(response).await
     }
 
-    pub async fn post_signed_d<T: de::DeserializeOwned>(&self, endpoint: &str, request: &str) -> Result<T> {
+    pub async fn post_signed_d<T: de::DeserializeOwned>(
+        &self,
+        endpoint: &str,
+        request: &str,
+    ) -> Result<T> {
         let r = self.post_signed(endpoint, request).await?;
         let t = from_str(r.as_str())?;
         Ok(t)
@@ -164,7 +172,9 @@ impl Client {
 
     pub async fn post(&self, endpoint: &str, symbol: Option<&str>) -> Result<String> {
         let url: String = format!("{}{}", self.host, endpoint);
-        let data: String = symbol.map(|s| format!("symbol={}", s)).unwrap_or_else(String::new);
+        let data: String = symbol
+            .map(|s| format!("symbol={}", s))
+            .unwrap_or_else(String::new);
         let url = format!("{}?{}", url, data);
         let response = self
             .inner
@@ -177,19 +187,35 @@ impl Client {
         self.handler(response).await
     }
 
-    pub async fn put(&self, endpoint: &str, listen_key: &str, symbol: Option<&str>) -> Result<String> {
+    pub async fn put(
+        &self,
+        endpoint: &str,
+        listen_key: &str,
+        symbol: Option<&str>,
+    ) -> Result<String> {
         let url: String = format!("{}{}", self.host, endpoint);
         let data: String = symbol
             .map(|s| format!("listenKey={}&symbol={}", listen_key, s))
             .unwrap_or_else(|| format!("listenKey={}", listen_key));
         let headers = self.build_headers(false)?;
         let url = format!("{}?{}", url, data);
-        let response = self.inner.clone().put(url.as_str()).headers(headers).send().await?;
+        let response = self
+            .inner
+            .clone()
+            .put(url.as_str())
+            .headers(headers)
+            .send()
+            .await?;
 
         self.handler(response).await
     }
 
-    pub async fn delete(&self, endpoint: &str, listen_key: &str, symbol: Option<&str>) -> Result<String> {
+    pub async fn delete(
+        &self,
+        endpoint: &str,
+        listen_key: &str,
+        symbol: Option<&str>,
+    ) -> Result<String> {
         let url: String = format!("{}{}", self.host, endpoint);
         let data: String = symbol
             .map(|s| format!("listenKey={}&symbol={}", listen_key, s))

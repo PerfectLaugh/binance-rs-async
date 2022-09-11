@@ -6,13 +6,12 @@ use serde::Serializer;
 use crate::account::OrderCancellation;
 use crate::client::Client;
 use crate::errors::*;
-use crate::rest_model::Order;
 use crate::rest_model::{OrderSide, TimeInForce};
 use crate::rest_model::{PairAndWindowQuery, PairQuery};
 use crate::util::*;
 
 use super::rest_model::{
-    AccountBalance, CanceledOrder, ChangeLeverageResponse, OrderType, Position, Transaction,
+    AccountBalance, CanceledOrder, ChangeLeverageResponse, Order, OrderType, Position, Transaction,
 };
 
 #[derive(Clone)]
